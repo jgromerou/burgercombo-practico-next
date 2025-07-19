@@ -1,18 +1,31 @@
+'use client';
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-
-
-
-
-
-
-const CategoryForm = async ({product}: any) => {
+const CategoryForm = () => {
     
-    //TODO: Aquí deberíamos traer las categorías de la base de datos.
+     const router = useRouter();
+
+     const handleSubmit = async (formData: FormData) => {
+        const data = {
+            name: formData.get('name'),
+        }
+       
+        const response = await axios.post("/api/categories",
+          data
+        );
+
+        console.log(response);
+        //TODO: Mostrar los errores como por ejemplo que el usuario ingrese campo vacio
+
+        //Redireccionar a categories
+        router.push('/admin/categories');
+    };
     
   return (
 
         <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
-          <form className="space-y-5">
+          <form action={handleSubmit} className="space-y-5">
             <div className="space-y-2">
                 <label
                     className="text-gray-800"
@@ -22,10 +35,13 @@ const CategoryForm = async ({product}: any) => {
                     id="name"
                     type="text"
                     name="name"
-                    className="block w-full p-3 bg-gray-100"
+                    className="block w-full p-3 bg-gray-100 mt-3"
                     placeholder="Nombre Categoría"
                 />
             </div>
+
+             <input type="submit" className="btn-primary"
+              value="Registrar Categoria"/>
           </form>
         </div>
     )

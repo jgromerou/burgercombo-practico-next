@@ -1,49 +1,54 @@
 import { connectDB } from "@/lib/mongodb"
-import Category from "@/models/Category";
+import Product from "@/models/Product";
+import "@/models/Category"; 
 import { NextResponse } from "next/server"
 
 
-//Category
-// params: _id, name
+//Product
+// params: _id, name, price, calorie
 
 // Get: Enviar información al Frontend
 
 export async function GET() {
     await connectDB();
     try {
-        const categories = await Category.find({});
-        return NextResponse.json(categories, { status: 200 });
+        const products = await Product.find({}).populate("category");
+        return NextResponse.json(products, { status: 200 });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"
         }, { status: 500 });
     }
 }
 
-// Post: crear nueva categoria
+// Post: crear nuevo producto
 export async function POST(req: any) {
     await connectDB();
     try {
         
         // en la req viene el objeto que me envia el front
         const body = await req.json()
-        const {name} = body
+        const {name, price, calorie, category} = body
 
         //Validación de que exista nombre y precio.
-        if(!name){
+        if(!name || !price || !calorie || !category){
             return NextResponse.json({
-                error:"El Nombre de la Categoría no existe"},
+                error:"El Nombre o el Precio o la caloria o la categoria no existe"},
                 { status:400 }
             )
         }
 
-        await Category.create({
+        await Product.create({
             name,
+            price,
+            calorie,
+            category
         })
 
         //devuelve un mensaje exitoso.
         return NextResponse.json({
-            msg: "Categoria creada exitosamente"},
+            msg: "Producto creado exitosamente"},
         { status:201 }
         )
 

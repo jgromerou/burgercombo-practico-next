@@ -1,0 +1,1 @@
+//Aqui va el tipado estricto de los tipos de datos globales que se usan en la aplicacion

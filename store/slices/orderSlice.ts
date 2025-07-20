@@ -20,7 +20,6 @@ const orderSlice = createSlice({
   reducers: {
     toggleProduct(state, action: PayloadAction<Product>) {
       const product = action.payload;
-      console.log(typeof product.price, typeof product.calorie); // debería ser "number"
       const categoryName = product.category.name;
       const selectionType = inferSelectionType(product.category.name);
 
@@ -40,20 +39,20 @@ const orderSlice = createSlice({
         // Remover producto
         const [removed] = category.products.splice(productIndex, 1);
         state.subtotal -= removed.price;
-        state.totalCalories -= removed.calorie;
+        state.totalCalories -= removed.calories;
       } else {
         // Agregar producto según reglas
         if (category.selectionType === 'single') {
           const [removed] = category.products.splice(0);
           if (removed) {
             state.subtotal -= removed.price;
-            state.totalCalories -= removed.calorie;
+            state.totalCalories -= removed.calories;
           }
         }
         
         category.products.push(product);
         state.subtotal += product.price;
-        state.totalCalories += product.calorie;
+        state.totalCalories += product.calories;
       }
     },
     clearOrder(state) {

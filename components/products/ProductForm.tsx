@@ -31,7 +31,7 @@ const ProductForm = () => {
         const data = {
             name: formData.get('name'),
             price: Number(formData.get('price')),
-            calorie: Number(formData.get('calorie')),
+            calories: Number(formData.get('calories')),
             category: formData.get('category')
         }
        
@@ -87,9 +87,9 @@ const ProductForm = () => {
                     htmlFor="price"
                 >Caloria:</label>
                 <input
-                    id="calorie"
+                    id="calories"
                     type="number"
-                    name="calorie"
+                    name="calories"
                     className="block w-full p-3 mb-3 bg-gray-200"
                     placeholder="Caloría Producto"
                 />

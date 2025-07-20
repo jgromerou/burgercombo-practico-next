@@ -3,7 +3,7 @@ interface Product {
   _id: string;
   name: string;
   price: number;
-  calorie: number;
+  calories: number;
   category: {
     _id:string,
     name:string

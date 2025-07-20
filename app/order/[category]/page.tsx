@@ -1,19 +1,30 @@
+'use client';
 
-
-
-//TODO: Aqui traigo el listado de productos de la base de datos
-
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import axios from "axios";
 import Heading from "@/components/ui/Heading";
+import ProductList from "@/components/products/ProductList";
 
-const OrderPage = async ({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}) => {
-  const { category } = await params;
-  
+const OrderPage =  () => {
+  const params = useParams();
+  const category = params.category; // o params['category']
 
-  console.log("Category:", category);
+  const [products, setProducts] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+
+  const getProducts = async () => {
+        const resp = await axios.get(`/api/products?category=${category}`)
+        setProducts(resp.data)  
+  }
+
+  useEffect(() => {
+    setLoaded(false);
+    getProducts();
+    setLoaded(true);
+    }, [])
+
+  if(!loaded) return <Heading>Cargando productos...</Heading>
 
   return (
     <>
@@ -23,7 +34,8 @@ const OrderPage = async ({
 
       //Todo: Aquí debería ir el componente que muestra las categorías
 
-      //Todo: Aquí debería ir el componente que muestra los productos por categoría
+      {/* Listado de Productos */}
+      <ProductList products={products} />
     </>
   );
 };

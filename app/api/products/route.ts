@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongodb"
 import Product from "@/models/Product";
 import "@/models/Category"; 
 import { NextResponse } from "next/server"
+import Category from "@/models/Category";
 
 
 //Product
@@ -9,10 +10,35 @@ import { NextResponse } from "next/server"
 
 // Get: Enviar información al Frontend
 
-export async function GET() {
+interface FilterQueryCategory {
+    category?:string
+}
+
+export async function GET(request: any) {
     await connectDB();
     try {
-        const products = await Product.find({}).populate("category");
+        const { searchParams } = new URL(request.url);
+
+        // Buscar primero la categoría por su nombre
+        const categoryName = searchParams.get('category')?.trim(); // Limpia espacios
+
+        let filter = {};
+        if (categoryName) {
+            const category = await Category.findOne({
+                name: { $regex: new RegExp(`^${categoryName}$`, 'i') }
+            });
+ 
+            if (!category) {
+                return NextResponse.json(
+                    { error: `Categoría ${categoryName} no encontrada` },
+                    { status: 404 }
+                );
+            }
+            filter = { category: category._id };
+        }
+
+        //Consulta los Productos por su categoria
+        const products = await Product.find(filter).populate("category");
         return NextResponse.json(products, { status: 200 });
     } catch (error) {
         console.log(error)
@@ -21,6 +47,19 @@ export async function GET() {
         }, { status: 500 });
     }
 }
+
+// export async function GET() {
+//     await connectDB();
+//     try {
+//         const products = await Product.find({}).populate("category");
+//         return NextResponse.json(products, { status: 200 });
+//     } catch (error) {
+//         console.log(error)
+//         return NextResponse.json({
+//             error: "Error en el servidor, comunicarse con un administrador"
+//         }, { status: 500 });
+//     }
+// }
 
 // Post: crear nuevo producto
 export async function POST(req: any) {
@@ -38,6 +77,8 @@ export async function POST(req: any) {
                 { status:400 }
             )
         }
+
+        console.log(price, calorie)
 
         await Product.create({
             name,

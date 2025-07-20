@@ -30,8 +30,8 @@ const ProductForm = () => {
      const handleSubmit = async (formData: FormData) => {
         const data = {
             name: formData.get('name'),
-            price: formData.get('price'),
-            calorie: formData.get('calorie'),
+            price: Number(formData.get('price')),
+            calorie: Number(formData.get('calorie')),
             category: formData.get('category')
         }
        

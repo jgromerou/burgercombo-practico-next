@@ -15,8 +15,6 @@ const OrderPage = () => {
   const router = useRouter();
   const category : any = params.category; // o params['category']
 
-  console.log(category)
-
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -41,8 +39,12 @@ const OrderPage = () => {
     setProducts(resp.data);
     setLoaded(true);
   };
-
-  if (category) fetchData();
+  
+  if (category) 
+    {
+      console.log('category', category)
+      fetchData();
+    }
 }, [category]);
 
   // Cuando el usuario selecciona una categoría desde el scroll

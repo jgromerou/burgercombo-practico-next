@@ -23,7 +23,7 @@ const orderSlice = createSlice({
       let category = state.order.find((c) => c.name === categoryName);
 
       if (!category) {
-        // Crear nueva categoría con el producto
+        // Crear nueva categoría con el producto o los productos seleccionados.
         state.order.push({
           name: categoryName,
           selectionType,

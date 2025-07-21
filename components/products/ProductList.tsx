@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useAppDispatch } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { toggleProductSelection } from '@/store/slices/orderSlice';
 
 interface ProductListProps {
@@ -11,28 +11,23 @@ const ProductList = ({products}: ProductListProps) => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const dispatch = useAppDispatch();
 
-  //Selecciona un solo checkbox
-  const handleSelectProduct = (product: Product) => {
+  //Selecciona el checkbox
+  const handleSelectProduct = (categoryName : any, selectionType : any, product: Product) => {
     const newSelection = selectedProduct?._id === product._id ? null : product;
     setSelectedProduct(newSelection);
     console.log('Selected product:', newSelection);
-    dispatch(toggleProductSelection({
-      categoryName: newSelection!.category.name,
-      selectionType: newSelection!.category.selectionType,
-      product: newSelection!, // esto debe ser del tipo Product
-    }));
+    dispatch(toggleProductSelection({categoryName, selectionType, product}));
   };
 
-  //Selecciona varios checkbox
-    //   const toggleProduct = (productId: string) => {
-    //     setSelectedProducts(prev => 
-    //       prev.includes(productId)
-    //         ? prev.filter(id => id !== productId)
-    //         : [...prev, productId]
-    //     );
-    //   };
-
-  //console.log('product Selected', selectedProduct)
+  //Lee la categoria con sus respectivos productos del store.
+  const useIsProductSelected = (categoryName: string, productId: string) => {
+    return useAppSelector((state) => {
+      const category = state.order.order.find((o) => o.name === categoryName);
+      if (!category) return false;
+      //console.log('por el true', category)
+      return category.selectedProducts.some((sp) => sp._id === productId);
+    });
+  };
 
   return (
     <div className="overflow-x-auto bg-white rounded-lg shadow">
@@ -59,8 +54,8 @@ const ProductList = ({products}: ProductListProps) => {
               <td className="px-6 py-4 whitespace-nowrap">
                 <input
                   type="checkbox"
-                  checked={selectedProduct?._id === product._id}
-                  onChange={() => handleSelectProduct(product)}
+                  checked={useIsProductSelected(product.category.name, product._id)}
+                  onChange={() => handleSelectProduct(product.category.name, product.category.selectionType, product)}
                   className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                 />
               </td>

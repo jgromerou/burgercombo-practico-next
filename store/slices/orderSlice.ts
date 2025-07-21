@@ -2,68 +2,58 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: OrderState = {
-  selections: {},
+  order: [],
   subtotal: 0,
-  totalCalories: 0
-};
-
-const inferSelectionType = (categoryName: string): 'single' | 'multiple' => {
-  const singleCategories = ['Hamburguesa Base'];
-  return singleCategories.some(term => 
-    categoryName.includes(term)
-  ) ? 'single' : 'multiple';
+  totalCalories: 0,
 };
 
 const orderSlice = createSlice({
   name: "Order",
   initialState,
   reducers: {
-    toggleProduct(state, action: PayloadAction<Product>) {
-      const product = action.payload;
-      const categoryName = product.category.name;
-      const selectionType = inferSelectionType(product.category.name);
+    toggleProductSelection(
+      state,
+      action: PayloadAction<{
+        categoryName: string;
+        selectionType: "simple" | "multiple";
+        product: Product;
+      }>
+    ) {
+      const { categoryName, selectionType, product } = action.payload;
+      let category = state.order.find((c) => c.name === categoryName);
 
-      // Inicializar categoría si no existe
-      if (!state.selections[categoryName]) {
-        state.selections[categoryName] = {
-          displayName: product.category.name,
-          products: [],
-          selectionType
-        };
-      }
-
-      const category = state.selections[categoryName];
-      const productIndex = category.products.findIndex(p => p._id === product._id);
-
-      if (productIndex >= 0) {
-        // Remover producto
-        const [removed] = category.products.splice(productIndex, 1);
-        state.subtotal -= removed.price;
-        state.totalCalories -= removed.calories;
+      if (!category) {
+        // Crear nueva categoría con el producto
+        state.order.push({
+          name: categoryName,
+          selectionType,
+          selectedProducts: [product],
+        });
       } else {
-        // Agregar producto según reglas
-        if (category.selectionType === 'single') {
-          const [removed] = category.products.splice(0);
-          if (removed) {
-            state.subtotal -= removed.price;
-            state.totalCalories -= removed.calories;
+        if (category.selectionType === "simple") {
+          category.selectedProducts = [product];
+        } else {
+          const exists = category.selectedProducts.some((p) => p._id === product._id);
+          if (exists) {
+            category.selectedProducts = category.selectedProducts.filter(p => p._id !== product._id);
+          } else {
+            category.selectedProducts.push(product);
           }
         }
-        
-        category.products.push(product);
-        state.subtotal += product.price;
-        state.totalCalories += product.calories;
       }
+
+      // Recalcular totales
+      const allProducts = state.order.flatMap((c) => c.selectedProducts);
+      state.subtotal = allProducts.reduce((sum, p) => sum + p.price, 0);
+      state.totalCalories = allProducts.reduce((sum, p) => sum + p.calories, 0);
     },
-    clearOrder(state) {
-      state.selections = {};
+    resetOrder(state) {
+      state.order = [];
       state.subtotal = 0;
       state.totalCalories = 0;
-    }
+    },
   }
 });
 
-// Action creators are generated for each case reducer function
-export const { toggleProduct, clearOrder } = orderSlice.actions;
-
+export const { toggleProductSelection, resetOrder } = orderSlice.actions;
 export default orderSlice.reducer;

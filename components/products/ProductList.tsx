@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useAppDispatch } from '@/store/store';
-import {toggleProduct} from './../../store/slices/orderSlice';
+import { toggleProductSelection } from '@/store/slices/orderSlice';
 
 interface ProductListProps {
   products: Product[];
@@ -15,7 +15,12 @@ const ProductList = ({products}: ProductListProps) => {
   const handleSelectProduct = (product: Product) => {
     const newSelection = selectedProduct?._id === product._id ? null : product;
     setSelectedProduct(newSelection);
-    dispatch(toggleProduct(newSelection!))
+    console.log('Selected product:', newSelection);
+    dispatch(toggleProductSelection({
+      categoryName: newSelection!.category.name,
+      selectionType: newSelection!.category.selectionType,
+      product: newSelection!, // esto debe ser del tipo Product
+    }));
   };
 
   //Selecciona varios checkbox
@@ -27,7 +32,7 @@ const ProductList = ({products}: ProductListProps) => {
     //     );
     //   };
 
-  console.log('product Selected', selectedProduct)
+  //console.log('product Selected', selectedProduct)
 
   return (
     <div className="overflow-x-auto bg-white rounded-lg shadow">
@@ -76,7 +81,7 @@ const ProductList = ({products}: ProductListProps) => {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                  {product.calorie} kcal
+                  {product.calories} kcal
                 </span>
               </td>
             </tr>

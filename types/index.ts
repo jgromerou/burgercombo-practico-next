@@ -6,18 +6,25 @@ interface Product {
   calories: number;
   category: {
     _id:string,
-    name:string
+    name:string,
+    selectionType: "simple" | "multiple";
   }
 }
 
-interface CategorySelections {
-  displayName: string;
-  products: Product[];
-  selectionType: 'single' | 'multiple';
-}
+type Category = {
+  name: string;
+  selectionType: "simple" | "multiple";
+  selectedProducts: Product[];
+};
 
-interface OrderState {
-  selections: Record<string, CategorySelections>;
+type OrderState = {
+  order: Category[];
   subtotal: number;
   totalCalories: number;
-}
+};
+
+// interface CategorySelections {
+//   displayName: string;
+//   products: Product[];
+//   selectionType: 'simple' | 'multiple';
+// }

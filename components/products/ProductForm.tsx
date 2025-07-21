@@ -114,8 +114,8 @@ const ProductForm = () => {
                 </select>
             </div>
 
-             <input type="submit" className="btn-primary"
-              value="Registrar Categoria"/>
+             <input type="submit" className="btn-primary mt-2"
+              value="Registrar Producto"/>
           </form>
         </div>
     )

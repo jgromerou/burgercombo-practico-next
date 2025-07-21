@@ -6,10 +6,16 @@ const CategoryForm = () => {
     
      const router = useRouter();
 
-     const handleSubmit = async (formData: FormData) => {
+     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        console.log("Enviando datos del formulario");
+        e.preventDefault(); 
+
+        const formData = new FormData(e.currentTarget);
         const data = {
-            name: formData.get('name'),
-        }
+          name: formData.get('name'),
+          selectionType: formData.get('selectionType')
+        };
+
        
         const response = await axios.post("/api/categories",
           data
@@ -25,7 +31,7 @@ const CategoryForm = () => {
   return (
 
         <div className="bg-white mt-10 px-5 py-10 rounded-md shadow-md max-w-3xl mx-auto">
-          <form action={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
                 <label
                     className="text-gray-800"
@@ -38,6 +44,20 @@ const CategoryForm = () => {
                     className="block w-full p-3 bg-gray-100 mt-3"
                     placeholder="Nombre Categoría"
                 />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-gray-800" htmlFor="selectionType">
+                Tipo de selección:
+              </label>
+              <select
+                id="selectionType"
+                name="selectionType"
+                className="block w-full p-3 bg-gray-100 mt-3"
+              >
+                <option value="simple">Simple</option>
+                <option value="multiple">Múltiple</option>
+              </select>
             </div>
 
              <input type="submit" className="btn-primary"

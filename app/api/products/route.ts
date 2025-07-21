@@ -69,9 +69,14 @@ export async function POST(req: any) {
         // en la req viene el objeto que me envia el front
         const body = await req.json()
         const {name, price, calories, category} = body
-
-        //Validación de que exista nombre y precio.
-        if(!name || !price || !calories || !category){
+        
+        //Validación de que exista nombre, precio calories y categoria.
+       if (
+            typeof name !== 'string' ||
+            typeof category !== 'string' ||
+            typeof price !== 'number' ||
+            typeof calories !== 'number'
+        ) {
             return NextResponse.json({
                 error:"El Nombre o el Precio o la caloria o la categoria no existe"},
                 { status:400 }

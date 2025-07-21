@@ -4,7 +4,7 @@ import { NextResponse } from "next/server"
 
 
 //Category
-// params: _id, name
+// params: _id, name, selectionType
 
 // Get: Enviar información al Frontend
 
@@ -27,7 +27,7 @@ export async function POST(req: any) {
         
         // en la req viene el objeto que me envia el front
         const body = await req.json()
-        const {name} = body
+        const {name, selectionType} = body
 
         //Validación de que exista nombre y precio.
         if(!name){
@@ -37,14 +37,22 @@ export async function POST(req: any) {
             )
         }
 
+         if(!selectionType){
+            return NextResponse.json({
+                error:"Tipo de Selección en Categoría no existe"},
+                { status:400 }
+            )
+        }
+        
         await Category.create({
             name,
-        })
+            selectionType
+        });
 
         //devuelve un mensaje exitoso.
         return NextResponse.json({
             msg: "Categoria creada exitosamente"},
-        { status:201 }
+            { status:201 }
         )
 
 

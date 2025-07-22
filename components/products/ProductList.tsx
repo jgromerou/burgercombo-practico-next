@@ -19,12 +19,12 @@ const ProductList = ({products}: ProductListProps) => {
     dispatch(toggleProductSelection({categoryName, selectionType, product}));
   };
 
-  //Lee la categoria con sus respectivos productos del store.
+  //Sirve para preguntar si un producto está seleccionado en una categoría específica, basándose en lo que hay guardado en el store de Redux.
   const useIsProductSelected = (categoryName: string, productId: string) => {
     return useAppSelector((state) => {
       const category = state.order.order.find((o) => o.name === categoryName);
       if (!category) return false;
-      //console.log('por el true', category)
+      //Verifica si el producto está seleccionado.
       return category.selectedProducts.some((sp) => sp._id === productId);
     });
   };

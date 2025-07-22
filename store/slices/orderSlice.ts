@@ -2,6 +2,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: OrderState = {
+  name: '',
   order: [],
   subtotal: 0,
   totalCalories: 0,

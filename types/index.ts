@@ -17,11 +17,19 @@ type Category = {
   selectedProducts: Product[];
 };
 
-type OrderState = {
-  order: Category[];
+
+interface CategoryOrder {
+  name: string;
+  selectionType: 'simple' | 'multiple';
+  selectedProducts: Product[];
+}
+
+interface OrderState {
+  name: string;
+  order: CategoryOrder[];
   subtotal: number;
   totalCalories: number;
-};
+}
 
 // interface CategorySelections {
 //   displayName: string;

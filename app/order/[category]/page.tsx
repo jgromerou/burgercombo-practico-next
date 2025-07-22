@@ -59,15 +59,6 @@ const OrderPage = () => {
     <>
       <Heading>Elige por categoría y armá tu combo</Heading>
 
-      {loaded && categories.length > 0 ? (
-        <CategoryScrollBar
-          categories={categories}
-          selectedCategoryName={selectedCategoryName}
-          onSelectCategory={handleCategoryChange}
-        />
-      ) : (
-        <p>No hay categorías disponibles</p>
-      )}
 
       {/* Listado de Productos */}
     {loaded && products.length > 0 ? (

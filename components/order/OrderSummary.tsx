@@ -1,12 +1,16 @@
 "use client";
-import { useAppSelector } from "@/store/store";
+import { useAppDispatch, useAppSelector } from "@/store/store";
 import { useMemo } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { resetOrder } from "@/store/slices/orderSlice";
 
 
 const OrderSummary = () => {
+  const router = useRouter();
+
   const {order, subtotal, totalCalories} = useAppSelector((state) => state.order);
-  //const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   // Calcular total de ítems
   const { itemsCount } = useMemo(() => {
@@ -40,6 +44,14 @@ const OrderSummary = () => {
     );
 
     console.log(response);
+    alert(response.data.msg)
+     //TODO: Mostrar los errores como por ejemplo que el usuario ingrese campo vacio
+
+        //Limpiar order en el store
+        dispatch(resetOrder())
+
+        //Redireccionar a order
+        router.push('/order');
   };
 
 

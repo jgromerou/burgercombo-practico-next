@@ -1,29 +1,70 @@
+'use client';
 
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import axios from 'axios';
+import Heading from '@/components/ui/Heading';
+import ProductList from '@/components/products/ProductList';
+import CategoryScrollBar from '@/components/categories/CategoryScrollBar';
 
+// Podés definir las categorías fijo o desde API
+// const categories = ['Pan', 'Carne', 'Queso', 'Salsas', 'Vegetales'];
 
-//TODO: Aqui traigo el listado de productos de la base de datos
+const OrderPage = () => {
+  const params = useParams();
+  const router = useRouter();
+  const category : any = params.category; // o params['category']
 
-import Heading from "@/components/ui/Heading";
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [loaded, setLoaded] = useState(false);
 
-const OrderPage = async ({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}) => {
-  const { category } = await params;
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string>(decodeURIComponent(category));
+
+  const getCategories = async () => {
+     const resp = await axios.get('/api/categories');
+     setCategories(resp.data);
+  //   //setSelectedCategoryName(decodeURIComponent(category)); // primera categoría por defecto
+  };
+
+ useEffect(() => {
+  const fetchData = async () => {
+    setLoaded(false);
+    await getCategories();
+    
+    const decoded = decodeURIComponent(category as string);
+    setSelectedCategoryName(decoded);
+
+    const resp = await axios.get(`/api/products?category=${decoded}`);
+    setProducts(resp.data);
+    setLoaded(true);
+  };
   
+  if (category) 
+    {
+      fetchData();
+    }
+}, [category]);
 
-  console.log("Category:", category);
+  // Cuando el usuario selecciona una categoría desde el scroll
+  const handleCategoryChange = (name: string) => {
+    router.push(`/order/${encodeURIComponent(name)}`);
+    setSelectedCategoryName(name);
+  };
+
+  if (!loaded) return <Heading>Cargando categorias y productos...</Heading>;
 
   return (
     <>
-      <Heading>
-        Elige por categoría y armá tu combo
-      </Heading>
+      <Heading>Elige por categoría y armá tu combo</Heading>
 
-      //Todo: Aquí debería ir el componente que muestra las categorías
 
-      //Todo: Aquí debería ir el componente que muestra los productos por categoría
+      {/* Listado de Productos */}
+    {loaded && products.length > 0 ? (
+      <ProductList products={products} />
+    ) : (
+      <p>No hay productos en esta categoría</p>
+    )}
     </>
   );
 };

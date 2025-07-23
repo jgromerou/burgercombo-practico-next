@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { toggleProductSelection } from '@/store/slices/orderSlice';
+import { formatCurrency } from '@/utils';
+import useIsProductSelected from '@/hooks/order/useIsProductSelected';
 
 interface ProductListProps {
   products: Product[];
@@ -15,14 +17,6 @@ const ProductList = ({ products }: ProductListProps) => {
     const newSelection = selectedProduct?._id === product._id ? null : product;
     setSelectedProduct(newSelection);
     dispatch(toggleProductSelection({ categoryName, selectionType, product }));
-  };
-
-  const useIsProductSelected = (categoryName: string, productId: string) => {
-    return useAppSelector((state) => {
-      const category = state.order.order.find((o) => o.name === categoryName);
-      if (!category) return false;
-      return category.selectedProducts.some((sp) => sp._id === productId);
-    });
   };
 
   return (
@@ -50,9 +44,9 @@ const ProductList = ({ products }: ProductListProps) => {
           </div>
 
           <div className="text-right">
-            <div className="text-sm text-gray-900 font-semibold">${product.price}</div>
+            <div className="text-sm text-gray-900 font-semibold">{formatCurrency(product.price)}</div>
             <div className="text-xs text-green-700 bg-green-100 px-2 py-0.5 rounded-full inline-block">
-              {product.calories} kcal
+              {product.calories} cal
             </div>
           </div>
         </div>

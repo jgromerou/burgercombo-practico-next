@@ -42,7 +42,6 @@ const OrderPage = () => {
   
   if (category) 
     {
-      console.log('category', category)
       fetchData();
     }
 }, [category]);

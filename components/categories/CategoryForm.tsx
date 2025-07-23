@@ -7,7 +7,6 @@ const CategoryForm = () => {
      const router = useRouter();
 
      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        console.log("Enviando datos del formulario");
         e.preventDefault(); 
 
         const formData = new FormData(e.currentTarget);
@@ -21,7 +20,6 @@ const CategoryForm = () => {
           data
         );
 
-        console.log(response);
         //TODO: Mostrar los errores como por ejemplo que el usuario ingrese campo vacio
 
         //Redireccionar a categories

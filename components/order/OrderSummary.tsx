@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { resetOrder } from "@/store/slices/orderSlice";
+import { formatCurrency } from "@/utils";
 
 
 const OrderSummary = () => {
@@ -38,12 +39,10 @@ const OrderSummary = () => {
       totalCalories,
     };
 
-    console.log(data)
     const response = await axios.post("/api/orders",
         data
     );
 
-    console.log(response);
     alert(response.data.msg)
      //TODO: Mostrar los errores como por ejemplo que el usuario ingrese campo vacio
 
@@ -70,11 +69,11 @@ const OrderSummary = () => {
             </p>
             <p>
               Total a pagar:{" "}
-              <span className="font-bold">${subtotal}</span>
+              <span className="font-bold">{formatCurrency(subtotal)}</span>
             </p>
             <p>
               Total de calorías:{" "}
-              <span className="font-bold">{totalCalories} kcal</span>
+              <span className="font-bold">{totalCalories} cal</span>
             </p>
             <form className="w-full mt-5 space-y-5" action={handleCreateOrder}>
               <input

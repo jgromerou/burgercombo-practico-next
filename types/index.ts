@@ -31,8 +31,17 @@ interface OrderState {
   totalCalories: number;
 }
 
-// interface CategorySelections {
-//   displayName: string;
-//   products: Product[];
-//   selectionType: 'simple' | 'multiple';
+type Order = {
+  _id: string;
+  customerName: string;
+  order: CategoryOrder[];
+  subtotal: number;
+  totalCalories: number;
+  createdAt: string;
+}
+
+// export type OrderWithProducts = Order & {
+//     orderProducts: (OrderProducts &{
+//         product: Product
+//     })[]
 // }

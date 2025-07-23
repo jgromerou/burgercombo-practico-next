@@ -34,14 +34,11 @@ const ProductForm = () => {
             calories: Number(formData.get('calories')),
             category: formData.get('category')
         }
-       
-        //console.log(data)
 
         const response = await axios.post("/api/products",
           data
         );
 
-        console.log(response);
         //TODO: Mostrar los errores como por ejemplo que el usuario ingrese campo vacio
 
         //Redireccionar a products

@@ -1,3 +1,4 @@
+import AdminSidebar from "@/components/admin/AdminSidebar";
 
 
 export default async function AdminLayout({
@@ -9,7 +10,7 @@ export default async function AdminLayout({
         <>
             <div className="md:flex">
                 <aside className="md:w-64 md:h-screen bg-white">
-                    //TODO: Aqui va el sidebar para navegar.
+                    <AdminSidebar />
                 </aside>
 
                 <main className="md:flex-1 md:h-screen md:overflow-y-scroll p-4 bg-gray-100">

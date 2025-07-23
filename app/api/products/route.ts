@@ -41,25 +41,11 @@ export async function GET(request: any) {
         const products = await Product.find(filter).populate("category");
         return NextResponse.json(products, { status: 200 });
     } catch (error) {
-        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"
         }, { status: 500 });
     }
 }
-
-// export async function GET() {
-//     await connectDB();
-//     try {
-//         const products = await Product.find({}).populate("category");
-//         return NextResponse.json(products, { status: 200 });
-//     } catch (error) {
-//         console.log(error)
-//         return NextResponse.json({
-//             error: "Error en el servidor, comunicarse con un administrador"
-//         }, { status: 500 });
-//     }
-// }
 
 // Post: crear nuevo producto
 export async function POST(req: any) {

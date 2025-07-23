@@ -11,10 +11,9 @@ import { NextResponse } from "next/server";
 export async function GET() {
     await connectDB();
     try {
-        const orders = await Order.find().sort({ createdAt: -1 });
+        const orders = await Order.find().populate('order.selectedProducts').sort({ createdAt: -1 });
         return NextResponse.json(orders, { status: 200 });
     } catch (error) {
-        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"
         }, { status: 500 });
@@ -77,7 +76,6 @@ export async function POST(req: any) {
 
 
     } catch (error) {
-        console.log(error);
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"},
             { status: 500 }

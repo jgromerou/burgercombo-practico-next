@@ -16,7 +16,7 @@ const CategoryForm = () => {
         };
 
        
-        const response = await axios.post("/api/categories",
+        await axios.post("/api/categories",
           data
         );
 

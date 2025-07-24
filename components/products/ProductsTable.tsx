@@ -1,7 +1,21 @@
 import Link from "next/link"
 
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  calories: number;
+  category: {
+    _id: string;
+    name: string;
+  }
+}
 
-const ProductsTable = ({products}: any) => {
+interface ProductsTableProps {
+  products: Product[]; 
+}
+
+const ProductsTable = ({products}: ProductsTableProps) => {
 
   return (
        <div className="px-4 mt-20">
@@ -32,7 +46,7 @@ const ProductsTable = ({products}: any) => {
                             <tbody className="divide-y divide-gray-200">
                             {
                                 products && products.length > 0 ? (
-                                    products.map((product: any) => (
+                                    products.map((product: Product) => (
                                     <tr key={product._id}>
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                                             {product.name}

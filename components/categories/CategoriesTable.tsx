@@ -1,7 +1,16 @@
 import Link from "next/link"
 
+interface Category {
+  _id: string;
+  name: string;
+}
 
-const CategoriesTable = ({categories}: any) => {
+interface CategoriesTableProps {
+  categories: Category[]; 
+}
+
+
+const CategoriesTable = ({categories}: CategoriesTableProps) => {
 
   return (
        <div className="px-4 mt-20">
@@ -22,7 +31,7 @@ const CategoriesTable = ({categories}: any) => {
                             <tbody className="divide-y divide-gray-200">
                             {
                                 categories && categories.length > 0 ? (
-                                    categories.map((category: any) => (
+                                    categories.map((category : Category) => (
                                     <tr key={category._id}>
                                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                                             {category.name}

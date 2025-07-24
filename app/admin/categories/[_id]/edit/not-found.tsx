@@ -2,7 +2,7 @@ import NotFound from '@/components/ui/NotFound'
 
 const NotFoundCategoryEdit = () => {
 
-    const nameObject = "categories"
+    const nameObject: string = "categories"
 
   return (
     <>

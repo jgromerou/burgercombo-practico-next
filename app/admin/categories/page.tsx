@@ -10,7 +10,7 @@ import Link from "next/link";
 
 const CategoriesPage = () => {
 
-  const [categories, setCategories] = useState("");
+  const [categories, setCategories] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   const getCategories = async () => {

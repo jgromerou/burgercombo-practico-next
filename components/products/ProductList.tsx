@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { toggleProductSelection } from '@/store/slices/orderSlice';
 import { formatCurrency } from '@/utils';
-import useIsProductSelected from '@/hooks/order/useIsProductSelected';
 
 interface ProductListProps {
   products: Product[];
@@ -13,10 +12,18 @@ const ProductList = ({ products }: ProductListProps) => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const dispatch = useAppDispatch();
 
-  const handleSelectProduct = (categoryName: any, selectionType: any, product: Product) => {
+  const handleSelectProduct = (categoryName: string, selectionType: "simple" | "multiple", product: Product) => {
     const newSelection = selectedProduct?._id === product._id ? null : product;
     setSelectedProduct(newSelection);
     dispatch(toggleProductSelection({ categoryName, selectionType, product }));
+  };
+
+  const IsProductSelected = (categoryName: string, productId: string): boolean => {
+    return useAppSelector((state) => {
+      const category = state.order.order.find((o) => o.name === categoryName);
+      if (!category) return false;
+      return category.selectedProducts.some((sp) => sp._id === productId);
+    });
   };
 
   return (
@@ -29,7 +36,7 @@ const ProductList = ({ products }: ProductListProps) => {
           <div className="flex items-center gap-4">
             <input
               type="checkbox"
-              checked={useIsProductSelected(product.category.name, product._id)}
+              checked={IsProductSelected(product.category.name, product._id)}
               onChange={() =>
                 handleSelectProduct(product.category.name, product.category.selectionType, product)
               }

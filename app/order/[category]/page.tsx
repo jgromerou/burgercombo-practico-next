@@ -1,39 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import axios from 'axios';
 import Heading from '@/components/ui/Heading';
 import ProductList from '@/components/products/ProductList';
-import CategoryScrollBar from '@/components/categories/CategoryScrollBar';
-
-// Podés definir las categorías fijo o desde API
-// const categories = ['Pan', 'Carne', 'Queso', 'Salsas', 'Vegetales'];
 
 const OrderPage = () => {
   const params = useParams();
-  const router = useRouter();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const category : any = params.category; // o params['category']
 
-  const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string>(decodeURIComponent(category));
-
-  const getCategories = async () => {
-     const resp = await axios.get('/api/categories');
-     setCategories(resp.data);
-  //   //setSelectedCategoryName(decodeURIComponent(category)); // primera categoría por defecto
-  };
 
  useEffect(() => {
   const fetchData = async () => {
     setLoaded(false);
-    await getCategories();
     
     const decoded = decodeURIComponent(category as string);
-    setSelectedCategoryName(decoded);
 
     const resp = await axios.get(`/api/products?category=${decoded}`);
     setProducts(resp.data);
@@ -45,12 +32,6 @@ const OrderPage = () => {
       fetchData();
     }
 }, [category]);
-
-  // Cuando el usuario selecciona una categoría desde el scroll
-  const handleCategoryChange = (name: string) => {
-    router.push(`/order/${encodeURIComponent(name)}`);
-    setSelectedCategoryName(name);
-  };
 
   if (!loaded) return <Heading>Cargando categorias y productos...</Heading>;
 

@@ -3,7 +3,7 @@
 
 import { connectDB } from "@/lib/mongodb";
 import Order from "@/models/Order";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Get: Enviar información al Frontend
 
@@ -14,14 +14,15 @@ export async function GET() {
         const orders = await Order.find().populate('order.selectedProducts').sort({ createdAt: -1 });
         return NextResponse.json(orders, { status: 200 });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"
         }, { status: 500 });
     }
 }
 
-// Post: crear nuevo producto
-export async function POST(req: any) {
+// Post: crear nueva orden
+export async function POST(req: NextRequest) {
     await connectDB();
     try {
         
@@ -76,6 +77,7 @@ export async function POST(req: any) {
 
 
     } catch (error) {
+        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"},
             { status: 500 }

@@ -1,7 +1,11 @@
 import Heading from '@/components/ui/Heading'
 import Link from 'next/link'
 
-const NotFound = ({ nameObject }: any) => {
+type NotFoundProps = {
+  nameObject: string;
+}
+
+const NotFound = ({ nameObject }: NotFoundProps) => {
   return (
     <div className='text-center mt-10'>
       <Heading>{nameObject} no encontrado/a</Heading>

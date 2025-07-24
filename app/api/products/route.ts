@@ -1,7 +1,7 @@
 import { connectDB } from "@/lib/mongodb"
 import Product from "@/models/Product";
 import "@/models/Category"; 
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import Category from "@/models/Category";
 
 
@@ -10,11 +10,7 @@ import Category from "@/models/Category";
 
 // Get: Enviar información al Frontend
 
-interface FilterQueryCategory {
-    category?:string
-}
-
-export async function GET(request: any) {
+export async function GET(request: NextRequest) {
     await connectDB();
     try {
         const { searchParams } = new URL(request.url);
@@ -41,6 +37,7 @@ export async function GET(request: any) {
         const products = await Product.find(filter).populate("category");
         return NextResponse.json(products, { status: 200 });
     } catch (error) {
+        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"
         }, { status: 500 });
@@ -48,7 +45,7 @@ export async function GET(request: any) {
 }
 
 // Post: crear nuevo producto
-export async function POST(req: any) {
+export async function POST(req: NextRequest) {
     await connectDB();
     try {
         
@@ -84,6 +81,7 @@ export async function POST(req: any) {
 
 
     } catch (error) {
+        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"},
             { status: 500 }

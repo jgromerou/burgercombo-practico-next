@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/mongodb"
 import Category from "@/models/Category";
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 
 //Category
@@ -14,6 +14,7 @@ export async function GET() {
         const categories = await Category.find({});
         return NextResponse.json(categories, { status: 200 });
     } catch (error) {
+        console.log(error); 
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"
         }, { status: 500 });
@@ -21,7 +22,7 @@ export async function GET() {
 }
 
 // Post: crear nueva categoria
-export async function POST(req: any) {
+export async function POST(req: NextRequest) {
     await connectDB();
     try {
         
@@ -57,6 +58,7 @@ export async function POST(req: any) {
 
 
     } catch (error) {
+        console.log(error)
         return NextResponse.json({
             error: "Error en el servidor, comunicarse con un administrador"},
             { status: 500 }

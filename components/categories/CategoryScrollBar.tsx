@@ -15,7 +15,7 @@ interface CategoryScrollBarProps {
 const CategoryScrollBar = ({categories, selectedCategoryName, onSelectCategory}: CategoryScrollBarProps) => {
   return (
     <div className="w-full overflow-x-auto whitespace-nowrap py-1 px-4 bg-gray-100 rounded-md shadow-inner mb-3">
-      {categories.map((cat, index) => (
+      {categories.map((cat) => (
         <button
           key={cat._id}
           onClick={() => onSelectCategory(cat.name)}

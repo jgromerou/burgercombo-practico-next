@@ -18,7 +18,7 @@ const OrderSummary = () => {
     let calculatedCount = 0;
 
     order.forEach((category) => {
-      category.selectedProducts.forEach((product: any) => {
+      category.selectedProducts.forEach(() => {
         calculatedCount += 1;
       });
     });

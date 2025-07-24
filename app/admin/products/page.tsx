@@ -7,7 +7,7 @@ import ProductsTable from "@/components/products/ProductsTable";
 
 const ProductsPage = () => {
 
-  const [products, setProducts] = useState("");
+  const [products, setProducts] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   const getProducts = async () => {
